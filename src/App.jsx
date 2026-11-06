@@ -8,6 +8,8 @@ import ListingDetailPage from "./pages/ListingDetailPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import PublicRoute from "./components/PublicRoute.jsx";
 // TODO (step 3): once you've built them, import your route guards:
 // import PrivateRoute from "./components/PrivateRoute.jsx";
 // import PublicRoute from "./components/PublicRoute.jsx";
@@ -26,27 +28,33 @@ function App() {
   }, [fetchMe]);
 
   return (
-    <div className="app">
+  <div className="app">
       <Navbar />
 
       <Routes>
+      <Route path="/" element={<BoardPage />} /> 
         {/* public — anyone can browse the board */}
-        <Route path="/" element={<BoardPage />} />
-        <Route path="/listings/:listingId" element={<ListingDetailPage />} />
+        <Route element={<PublicRoute/>}>
+          
+          <Route path="/listings/:listingId" element={<ListingDetailPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+        </Route>
 
         {/* TODO (step 3): wrap these two in <PublicRoute> so logged-in users skip them:
               <Route element={<PublicRoute />}>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
               </Route>                                                              */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        
 
         {/* TODO (step 3): wrap this in <PrivateRoute> so logged-out users get sent to /login:
               <Route element={<PrivateRoute />}>
                 <Route path="/profile" element={<ProfilePage />} />
               </Route>                                                              */}
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route element={<PrivateRoute/>}>
+          <Route path="/profile" element={<ProfilePage />} />
+        </Route>
       </Routes>
 
       <footer className="board-footer">
@@ -56,5 +64,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
